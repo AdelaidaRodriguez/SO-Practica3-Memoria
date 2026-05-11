@@ -1,0 +1,29 @@
+/* Autor: Adelaida Rodriguez */
+#include <stdio.h>
+#define PAGE_BITS 4
+#define PAGE_SIZE (1 << PAGE_BITS)
+#define VA_BITS 8
+#define NUM_PAGES (1 << (VA_BITS - PAGE_BITS))
+
+int page_table[NUM_PAGES] = {3, -1, 7, 2, 1, 1, -1, 5, -1, -1, 4, -1, 6, 1, 0, -1};
+
+void traducir(int va) {
+    int vpn = va >> PAGE_BITS;
+    int offset = va & (PAGE_SIZE - 1);
+    printf("VA=0x%02X  VPN=%2d  Offset=%2d ", va, vpn, offset);
+    if (page_table[vpn] == -1) {
+        printf("-> PAGE FAULT\n");
+    } else {
+        int pfn = page_table[vpn];
+        int pa = (pfn << PAGE_BITS) | offset;
+        printf("-> PFN=%2d PA=0x%02X\n", pfn, pa);
+    }
+}
+
+int main() {
+    printf("SISTEMAS OPERATIVOS - ADELAIDA RODRIGUEZ\n");
+    int vas[] = {0x00, 0x0F, 0x20, 0x35, 0x10, 0xA3, 0xC8, 0xF0};
+    int n = sizeof(vas) / sizeof(vas[0]);
+    for (int i=0; i<n; i++) traducir(vas[i]);
+    return 0;
+}

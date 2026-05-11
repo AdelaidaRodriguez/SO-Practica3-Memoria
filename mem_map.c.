@@ -1,0 +1,22 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+
+int global_var = 42;
+
+int main() {
+    int local_var = 7;
+    void *heap_var = malloc(100);
+
+    printf("PID del proceso: %d\n", getpid());
+    printf("Direccion de main (Code): %p\n", (void*)main);
+    printf("Direccion de global_var (Data): %p\n", (void*)&global_var);
+    printf("Direccion de local_var (Stack): %p\n", (void*)&local_var);
+    printf("Direccion de heap_var (Heap): %p\n", heap_var);
+
+    printf("\nPresione ENTER para continuar y ver el mapa de memoria...");
+    getchar();
+
+    free(heap_var);
+    return 0;
+}
